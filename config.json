@@ -1,0 +1,14 @@
+{
+  "symbols": {
+    "SPX CFD proxy (^GSPC)": "^GSPC",
+    "SPX Futures (ES=F)": "ES=F",
+    "XAD6.DE": "XAD6.DE"
+  },
+  "default_selected": [
+    "SPX CFD proxy (^GSPC)",
+    "SPX Futures (ES=F)",
+    "XAD6.DE"
+  ],
+  "ema_options": [9, 20, 50, 100, 200],
+  "default_emas": [20, 50, 200]
+}
