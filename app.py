@@ -370,3 +370,63 @@ for label in selected:
     st.subheader(label)
     fig = build_chart(data_map[label], label, emas)
     st.plotly_chart(fig, use_container_width=True)
+
+# ---------------- NEWS (SIMPLE MOCK + STRUCTURE) ----------------
+# Fase inicial: estrutura pronta para depois ligar API real
+
+def get_mock_news():
+    return [
+        {"title": "Oil prices rising amid supply concerns", "sentiment": "Bearish", "theme": "Energy / Inflation"},
+        {"title": "US yields remain elevated", "sentiment": "Bearish", "theme": "Rates"},
+        {"title": "Tech earnings mixed outlook", "sentiment": "Neutral", "theme": "Earnings"},
+    ]
+
+
+def summarize_market_context(news_list):
+    bearish = sum(1 for n in news_list if n["sentiment"] == "Bearish")
+    bullish = sum(1 for n in news_list if n["sentiment"] == "Bullish")
+
+    if bearish > bullish:
+        sentiment = "Bearish"
+    elif bullish > bearish:
+        sentiment = "Bullish"
+    else:
+        sentiment = "Neutral"
+
+    themes = list(set(n["theme"] for n in news_list))
+
+    comment = ""
+    if sentiment == "Bearish":
+        comment = "Fluxo noticioso com viés negativo para equities."
+    elif sentiment == "Bullish":
+        comment = "Fluxo noticioso com suporte ao risco."
+    else:
+        comment = "Fluxo noticioso misto, sem direção clara."
+
+    return {
+        "sentiment": sentiment,
+        "themes": ", ".join(themes),
+        "comment": comment
+    }
+
+
+def render_news_section():
+    st.subheader("Contexto de Mercado (News)")
+
+    news = get_mock_news()
+    context = summarize_market_context(news)
+
+    c1, c2 = st.columns(2)
+    c1.metric("Sentimento", context["sentiment"])
+    c2.metric("Temas", context["themes"])
+
+    st.markdown(f"**Leitura:** {context['comment']}")
+
+    with st.expander("Ver notícias"):
+        for n in news:
+            st.markdown(f"- {n['title']} ({n['sentiment']})")
+
+
+# ---------------- RENDER NEWS BEFORE DATA ----------------
+render_news_section()
+
